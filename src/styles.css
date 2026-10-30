@@ -237,10 +237,6 @@
     stroke: var(--ink);
   }
 
-  .marca .dourado {
-    stroke: url(#kr-ouro);
-  }
-
   .aneis {
     position: absolute;
     left: 50%;

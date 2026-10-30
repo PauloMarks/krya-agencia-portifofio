@@ -79,6 +79,11 @@ function Marca() {
             <stop offset=".5" stopColor="var(--ouro)" />
             <stop offset="1" stopColor="var(--ouro-escuro)" />
           </linearGradient>
+          <linearGradient id="kr-ouro-a" gradientUnits="userSpaceOnUse" x1="276" y1="0" x2="356" y2="104">
+            <stop offset="0" stopColor="var(--ouro-claro)" />
+            <stop offset=".5" stopColor="var(--ouro)" />
+            <stop offset="1" stopColor="var(--ouro-escuro)" />
+          </linearGradient>
           <clipPath id="kr-corte">
             <rect x="-20" y="0" width="420" height="100" />
           </clipPath>
@@ -104,7 +109,7 @@ function Marca() {
               <path d="M220 48V100" />
             </g>
             {/* A */}
-            <g className="dourado">
+            <g stroke="url(#kr-ouro-a)">
               <path d="M276 104L316 2L356 104" strokeLinejoin="miter" />
               <path d="M294 70H338" />
             </g>
