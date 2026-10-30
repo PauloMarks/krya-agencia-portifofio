@@ -8,3 +8,6 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+## Project rules
+- The links page styles live as named component classes plus brand tokens in `src/styles.css` (not inline utilities), so the black-and-gold look is tuned in one place.
