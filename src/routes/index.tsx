@@ -8,8 +8,8 @@ import primisown from "@/assets/portfolio/primisown.webp.asset.json";
 import pabloScopel from "@/assets/portfolio/pabloscopel.webp.asset.json";
 import idalecioOliveira from "@/assets/portfolio/idaleciooliveira.webp.asset.json";
 
-const WHATSAPP_NUMERO = "5567981221585";
-const WHATSAPP_EXIBICAO = "(67) 98122-1585";
+const WHATSAPP_NUMERO = "5561993086986";
+const WHATSAPP_EXIBICAO = "(61) 99308-6986";
 const PORTFOLIO_URL = "https://khonefabrica.web.app/portfolio";
 
 const whatsapp = (texto: string) =>
@@ -31,7 +31,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Tech house em Campo Grande/MS: IA, sites, sistemas, CRMs, SaaS e automação. Fale com a Krya pelo WhatsApp e veja o portfólio.",
+          "Tech house: IA, sites, sistemas, CRMs, SaaS e automação. Fale com a Krya pelo WhatsApp e veja o portfólio.",
       },
       { property: "og:title", content: "Krya | Tecnologia que impulsiona o futuro" },
       { property: "og:description", content: "Fale com a Krya pelo WhatsApp e veja o portfólio." },
@@ -124,10 +124,6 @@ function KryaLinks() {
   return (
     <div className="pagina">
       <header className="topo coluna">
-        <p className="selo sobe">
-          <i aria-hidden="true" />
-          Tech House · Campo Grande/MS
-        </p>
         <Marca />
         <p className="frase sobe" style={{ "--d": ".16s" } as CSSProperties}>
           Tecnologia que impulsiona <span className="ouro">o futuro</span>
@@ -256,7 +252,7 @@ function KryaLinks() {
             <path d="M56.47 31.52L40.76 50L56.47 68.48" fill="none" stroke="url(#rod-ouro)" strokeWidth="7.04" strokeLinecap="square" />
           </g>
         </svg>
-        <p>© 2026 Krya · Campo Grande/MS</p>
+        <p>© 2026 Krya</p>
       </footer>
     </div>
   );

@@ -80,7 +80,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
       { title: "Krya | Tecnologia que impulsiona o futuro" },
       { name: "description", content: "Tech house: IA, sites, sistemas, CRMs, SaaS e automação." },
-      { name: "theme-color", content: "#0a0a09" },
+      { name: "theme-color", content: "#000000" },
       { name: "color-scheme", content: "dark" },
       { name: "format-detection", content: "telephone=no" },
       { property: "og:site_name", content: "Krya" },
