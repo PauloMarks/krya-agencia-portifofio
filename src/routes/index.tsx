@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 
 import liraCapital from "@/assets/portfolio/liracapital.webp.asset.json";
@@ -60,7 +61,7 @@ function Seta() {
 
 function Marca() {
   return (
-    <h1 className="marca sobe" style={{ "--d": ".08s" } as React.CSSProperties}>
+    <h1 className="marca sobe" style={{ "--d": ".08s" } as CSSProperties}>
       <span className="sr">Krya</span>
       <svg className="aneis" viewBox="-500 -500 1000 1000" aria-hidden="true" focusable="false">
         <circle r="96" strokeOpacity=".34" />
@@ -123,10 +124,10 @@ function KryaLinks() {
           Tech House · Campo Grande/MS
         </p>
         <Marca />
-        <p className="frase sobe" style={{ "--d": ".16s" } as React.CSSProperties}>
+        <p className="frase sobe" style={{ "--d": ".16s" } as CSSProperties}>
           Tecnologia que impulsiona <span className="ouro">o futuro</span>
         </p>
-        <p className="areas sobe" style={{ "--d": ".22s" } as React.CSSProperties}>
+        <p className="areas sobe" style={{ "--d": ".22s" } as CSSProperties}>
           <span>
             IA<i> · </i>Sites<i> · </i>Sistemas
           </span>
@@ -142,7 +143,7 @@ function KryaLinks() {
       <nav className="links coluna" aria-label="Links da Krya">
         <a
           className="link sobe"
-          style={{ "--d": ".3s" } as React.CSSProperties}
+          style={{ "--d": ".3s" } as CSSProperties}
           href={whatsapp("Olá! Vim pelo Instagram da Krya.")}
         >
           <span className="ico" aria-hidden="true">
@@ -157,7 +158,7 @@ function KryaLinks() {
           </span>
           <Seta />
         </a>
-        <a className="link sobe" style={{ "--d": ".36s" } as React.CSSProperties} href={PORTFOLIO_URL}>
+        <a className="link sobe" style={{ "--d": ".36s" } as CSSProperties} href={PORTFOLIO_URL}>
           <span className="ico" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
               <rect x="3.75" y="3.75" width="7" height="7" rx="1.6" />
@@ -174,7 +175,7 @@ function KryaLinks() {
         </a>
         <a
           className="link sobe"
-          style={{ "--d": ".42s" } as React.CSSProperties}
+          style={{ "--d": ".42s" } as CSSProperties}
           href={whatsapp("Olá! Vim pelo Instagram e quero uma landing page pro meu negócio")}
         >
           <span className="ico" aria-hidden="true">
@@ -195,14 +196,14 @@ function KryaLinks() {
 
       <section
         className="prova coluna sobe"
-        style={{ "--d": ".56s" } as React.CSSProperties}
+        style={{ "--d": ".56s" } as CSSProperties}
         aria-label="A Krya em números"
       >
         <b className="ouro">+2.550</b>
         <span>empresas ajudadas com a nossa experiência em tecnologia</span>
       </section>
 
-      <section className="obras sobe" style={{ "--d": ".62s" } as React.CSSProperties} aria-labelledby="obras-t">
+      <section className="obras sobe" style={{ "--d": ".62s" } as CSSProperties} aria-labelledby="obras-t">
         <div className="obras-cab coluna">
           <h2 id="obras-t">Do nosso portfólio</h2>
           <a className="ver" href={PORTFOLIO_URL}>
@@ -232,7 +233,7 @@ function KryaLinks() {
         </a>
       </section>
 
-      <footer className="rodape coluna sobe" style={{ "--d": ".76s" } as React.CSSProperties}>
+      <footer className="rodape coluna sobe" style={{ "--d": ".76s" } as CSSProperties}>
         <svg viewBox="0 0 100 100" aria-hidden="true" focusable="false">
           <defs>
             <linearGradient id="rod-ouro" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="100" y2="100">
