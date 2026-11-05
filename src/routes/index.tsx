@@ -10,7 +10,7 @@ import idalecioOliveira from "@/assets/portfolio/idaleciooliveira.webp.asset.jso
 
 const WHATSAPP_NUMERO = "5561993086986";
 const WHATSAPP_EXIBICAO = "(61) 99308-6986";
-const PORTFOLIO_URL = "https://khonefabrica.web.app/portfolio";
+const PORTFOLIO_URL = "https://krya-creative-portfolio.lovable.app";
 
 const whatsapp = (texto: string) =>
   `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(texto)}`;
