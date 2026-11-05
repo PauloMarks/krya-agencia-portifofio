@@ -4,9 +4,19 @@ import { createFileRoute } from "@tanstack/react-router";
 const WHATSAPP_NUMERO = "5561993086986";
 const WHATSAPP_EXIBICAO = "(61) 99308-6986";
 const PORTFOLIO_URL = "https://krya-creative-portfolio.lovable.app";
+const EMPRESAS = 1750;
 
 const whatsapp = (texto: string) =>
   `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(texto)}`;
+
+/* Poeira dourada: posições e tempos derivados do índice, sem random em runtime. */
+const FAISCAS = Array.from({ length: 18 }, (_, n) => ({
+  "--fx": `${(n * 53 + 7) % 100}%`,
+  "--fd": `${(n % 9) * 1.4}s`,
+  "--ft": `${11 + (n % 6) * 3}s`,
+  "--fs": n % 4 === 0 ? "3px" : n % 3 === 0 ? "2.4px" : "1.6px",
+  "--fdx": `${(n % 2 ? 1 : -1) * (16 + (n % 5) * 14)}px`,
+})) as CSSProperties[];
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -147,13 +157,43 @@ function useMovimento() {
     );
     el.querySelectorAll(".revela").forEach((n) => io.observe(n));
 
-    // Pointer glow on cards
+    const holofote = el.querySelector<HTMLElement>(".holofote");
+    let cardAtual: HTMLElement | null = null;
+    let rafSpot = 0;
+
+    const solta = (c: HTMLElement | null) => {
+      if (!c) return;
+      c.style.setProperty("--rx", "0deg");
+      c.style.setProperty("--ry", "0deg");
+    };
+
+    // Pointer glow + subtle 3D tilt on cards + gold spotlight on the page
     const onMove = (ev: PointerEvent) => {
       const card = (ev.target as HTMLElement).closest<HTMLElement>(".link");
-      if (!card) return;
-      const r = card.getBoundingClientRect();
-      card.style.setProperty("--mx", `${ev.clientX - r.left}px`);
-      card.style.setProperty("--my", `${ev.clientY - r.top}px`);
+      if (card !== cardAtual) {
+        solta(cardAtual);
+        cardAtual = card;
+      }
+      if (card) {
+        const r = card.getBoundingClientRect();
+        const mx = ev.clientX - r.left;
+        const my = ev.clientY - r.top;
+        card.style.setProperty("--mx", `${mx}px`);
+        card.style.setProperty("--my", `${my}px`);
+        if (!reduz && ev.pointerType === "mouse") {
+          card.style.setProperty("--rx", `${(0.5 - my / r.height) * 6}deg`);
+          card.style.setProperty("--ry", `${(mx / r.width - 0.5) * 7}deg`);
+        }
+      }
+      if (holofote && ev.pointerType === "mouse") {
+        if (rafSpot) cancelAnimationFrame(rafSpot);
+        rafSpot = requestAnimationFrame(() => {
+          rafSpot = 0;
+          holofote.style.setProperty("--hx", `${ev.clientX}px`);
+          holofote.style.setProperty("--hy", `${ev.clientY}px`);
+          holofote.classList.add("ativo");
+        });
+      }
     };
     el.addEventListener("pointermove", onMove, { passive: true });
 
@@ -172,11 +212,30 @@ function useMovimento() {
     };
     window.addEventListener("pointermove", onPar, { passive: true });
 
+    // Scroll progress -> gold hairline + header depth
+    let rafScroll = 0;
+    const onScroll = () => {
+      if (rafScroll) return;
+      rafScroll = requestAnimationFrame(() => {
+        rafScroll = 0;
+        const doc = document.documentElement;
+        const h = doc.scrollHeight - window.innerHeight;
+        const p = h > 4 ? Math.min(1, Math.max(0, window.scrollY / h)) : 0;
+        el.style.setProperty("--prog", String(p));
+      });
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+
     return () => {
       io.disconnect();
       el.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointermove", onPar);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
       cancelAnimationFrame(raf);
+      if (rafSpot) cancelAnimationFrame(rafSpot);
     };
   }, []);
   return raiz;
@@ -187,6 +246,16 @@ function KryaLinks() {
   return (
     <div className="pagina" ref={raiz}>
       <div className="aura" aria-hidden="true" />
+      <div className="aura aura-2" aria-hidden="true" />
+      <div className="faisca" aria-hidden="true">
+        {FAISCAS.map((f, n) => (
+          <i key={n} style={f} />
+        ))}
+      </div>
+      <div className="holofote" aria-hidden="true" />
+      <div className="scan" aria-hidden="true" />
+      <div className="progresso" aria-hidden="true" />
+
       <header className="topo coluna">
         <div className="marca-parallax">
           <Marca />
@@ -217,6 +286,7 @@ function KryaLinks() {
           style={{ "--d": ".3s" } as CSSProperties}
           href={whatsapp("Olá! Vim pelo Instagram da Krya.")}
         >
+          <span className="feixe" aria-hidden="true" />
           <span className="ico" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
               <path d="M20.25 11.6a8.25 8.25 0 0 1-12.13 7.28L3.75 20.25l1.4-4.1A8.25 8.25 0 1 1 20.25 11.6Z" />
@@ -231,6 +301,7 @@ function KryaLinks() {
           <span className="borda" aria-hidden="true" />
         </a>
         <a className="link sobe" style={{ "--d": ".36s" } as CSSProperties} href={PORTFOLIO_URL}>
+          <span className="feixe" aria-hidden="true" />
           <span className="ico" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
               <rect x="3.75" y="3.75" width="7" height="7" rx="1.6" />
@@ -244,12 +315,14 @@ function KryaLinks() {
             <span className="s">Projetos no ar, por setor</span>
           </span>
           <Seta />
+          <span className="borda" aria-hidden="true" />
         </a>
         <a
           className="link sobe"
           style={{ "--d": ".42s" } as CSSProperties}
           href={whatsapp("Olá! Vim pelo Instagram e quero uma landing page pro meu negócio")}
         >
+          <span className="feixe" aria-hidden="true" />
           <span className="ico" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
               <rect x="3.25" y="4.25" width="17.5" height="15.5" rx="2.2" />
@@ -263,14 +336,14 @@ function KryaLinks() {
             <span className="s">Atendimento pelo WhatsApp</span>
           </span>
           <Seta />
+          <span className="borda" aria-hidden="true" />
         </a>
       </nav>
 
-      <section
-        className="prova coluna revela"
-        aria-label="A Krya em números"
-      >
-        <b className="ouro" data-conta="2550">+2.550</b>
+      <section className="prova coluna revela" aria-label="A Krya em números">
+        <b className="ouro" data-conta={EMPRESAS}>
+          {"+" + EMPRESAS.toLocaleString("pt-BR")}
+        </b>
         <span>empresas ajudadas com a nossa experiência em tecnologia</span>
       </section>
 
