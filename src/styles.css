@@ -719,7 +719,11 @@
 @keyframes sobe {
   0% {
     opacity: 0;
-    transform: translateY(16px);
+    transform: translateY(26px);
+    filter: blur(7px);
+  }
+  55% {
+    filter: blur(0);
   }
 }
 
@@ -807,7 +811,7 @@
   .link.destaque {
     border-color: oklch(0.8 0.13 84 / 30%);
   }
-  .link.destaque .borda {
+  .link .borda {
     position: absolute;
     inset: 0;
     border-radius: inherit;
@@ -817,7 +821,10 @@
     -webkit-mask-composite: xor;
     mask-composite: exclude;
     pointer-events: none;
-    opacity: 0.8;
+    opacity: 0.4;
+  }
+  .link.destaque .borda {
+    opacity: 0.85;
   }
 
   .link:focus-visible::before,
@@ -831,7 +838,10 @@
 
   @media (hover: hover) {
     .link:hover {
-      transform: translateY(-2px);
+      transform: perspective(760px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(-3px);
+    }
+    .link:hover:active {
+      transform: perspective(760px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(-1px) scale(0.985);
     }
     .link:hover::before {
       opacity: 1;
@@ -875,7 +885,9 @@
     animation: deriva 22s ease-in-out infinite alternate;
   }
   .marca .kr {
-    animation: wipe 1.4s var(--entra) 0.15s both;
+    animation:
+      wipe 1.4s var(--entra) 0.15s both,
+      pulsa-ouro 5.5s ease-in-out 1.6s infinite alternate;
   }
   .marca .kr .tinta,
   .marca .kr [stroke^="url"] {
@@ -885,7 +897,7 @@
   .frase .ouro {
     background-size: 220% 100%;
     background-image: linear-gradient(100deg, var(--ouro-escuro) 20%, var(--ouro-claro) 45%, var(--ouro) 55%, var(--ouro-escuro) 80%);
-    animation: brilho 2.4s var(--entra) 0.6s both;
+    animation: brilho 3.4s var(--entra) 0.7s infinite alternate;
   }
   .frase .palavra {
     display: inline-block;
@@ -905,8 +917,8 @@
     animation-name: entra-card;
     animation-duration: 1s;
   }
-  .link.destaque .borda {
-    animation: gira 6s linear 1.6s infinite;
+  .link .borda {
+    animation: gira 6s linear calc(1.6s + var(--d, 0s) * 2) infinite;
   }
   .link.sobe .ico {
     animation: pop 0.8s var(--mola) both;
@@ -992,14 +1004,14 @@
 }
 @keyframes mascara {
   0% {
-    transform: translateY(105%);
+    transform: translateY(112%) skewY(3deg);
   }
 }
 @keyframes entra-card {
   0% {
     opacity: 0;
-    transform: translateY(22px) scale(0.97);
-    filter: blur(4px);
+    transform: translateY(30px) scale(0.955);
+    filter: blur(7px);
   }
   60% {
     filter: blur(0);
