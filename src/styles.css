@@ -719,7 +719,11 @@
 @keyframes sobe {
   0% {
     opacity: 0;
-    transform: translateY(16px);
+    transform: translateY(26px);
+    filter: blur(7px);
+  }
+  55% {
+    filter: blur(0);
   }
 }
 
@@ -807,7 +811,7 @@
   .link.destaque {
     border-color: oklch(0.8 0.13 84 / 30%);
   }
-  .link.destaque .borda {
+  .link .borda {
     position: absolute;
     inset: 0;
     border-radius: inherit;
@@ -817,7 +821,10 @@
     -webkit-mask-composite: xor;
     mask-composite: exclude;
     pointer-events: none;
-    opacity: 0.8;
+    opacity: 0.4;
+  }
+  .link.destaque .borda {
+    opacity: 0.85;
   }
 
   .link:focus-visible::before,
@@ -831,7 +838,10 @@
 
   @media (hover: hover) {
     .link:hover {
-      transform: translateY(-2px);
+      transform: perspective(760px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(-3px);
+    }
+    .link:hover:active {
+      transform: perspective(760px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(-1px) scale(0.985);
     }
     .link:hover::before {
       opacity: 1;
@@ -875,7 +885,9 @@
     animation: deriva 22s ease-in-out infinite alternate;
   }
   .marca .kr {
-    animation: wipe 1.4s var(--entra) 0.15s both;
+    animation:
+      wipe 1.4s var(--entra) 0.15s both,
+      pulsa-ouro 5.5s ease-in-out 1.6s infinite alternate;
   }
   .marca .kr .tinta,
   .marca .kr [stroke^="url"] {
@@ -885,7 +897,7 @@
   .frase .ouro {
     background-size: 220% 100%;
     background-image: linear-gradient(100deg, var(--ouro-escuro) 20%, var(--ouro-claro) 45%, var(--ouro) 55%, var(--ouro-escuro) 80%);
-    animation: brilho 2.4s var(--entra) 0.6s both;
+    animation: brilho 3.4s var(--entra) 0.7s infinite alternate;
   }
   .frase .palavra {
     display: inline-block;
@@ -905,8 +917,8 @@
     animation-name: entra-card;
     animation-duration: 1s;
   }
-  .link.destaque .borda {
-    animation: gira 6s linear 1.6s infinite;
+  .link .borda {
+    animation: gira 6s linear calc(1.6s + var(--d, 0s) * 2) infinite;
   }
   .link.sobe .ico {
     animation: pop 0.8s var(--mola) both;
@@ -992,14 +1004,14 @@
 }
 @keyframes mascara {
   0% {
-    transform: translateY(105%);
+    transform: translateY(112%) skewY(3deg);
   }
 }
 @keyframes entra-card {
   0% {
     opacity: 0;
-    transform: translateY(22px) scale(0.97);
-    filter: blur(4px);
+    transform: translateY(30px) scale(0.955);
+    filter: blur(7px);
   }
   60% {
     filter: blur(0);
@@ -1020,5 +1032,325 @@
   100% {
     transform: translate(-50%, -50%) scale(1.25);
     opacity: 0.4;
+  }
+}
+
+/* ---------- Motion system II — camadas ambientes e luz em movimento ----------
+ * Poeira dourada, holofote do cursor, fio de progresso, feixes que atravessam
+ * os cartões, órbitas nos anéis e brilho periódico nos números.
+ * Só transform/opacity/filtro — e nada disso roda com prefers-reduced-motion.
+ */
+@layer components {
+  .aura-2 {
+    position: fixed;
+    inset: -35%;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.55;
+    background:
+      conic-gradient(from 200deg at 50% 45%, transparent 0 22%, oklch(0.74 0.13 80 / 8%) 38%, transparent 55%, oklch(0.6 0.12 75 / 6%) 72%, transparent 88%),
+      radial-gradient(46% 38% at 50% 50%, oklch(0.66 0.12 78 / 6%), transparent 72%);
+    will-change: transform;
+  }
+
+  .faisca {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .faisca i {
+    position: absolute;
+    left: var(--fx, 50%);
+    bottom: -4%;
+    width: var(--fs, 2px);
+    height: var(--fs, 2px);
+    border-radius: 50%;
+    background: var(--ouro-claro);
+    box-shadow: 0 0 8px 1px oklch(0.8 0.13 84 / 50%);
+    opacity: 0;
+    will-change: transform, opacity;
+  }
+
+  .holofote {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 640px;
+    height: 640px;
+    margin: -320px 0 0 -320px;
+    z-index: -1;
+    border-radius: 50%;
+    pointer-events: none;
+    background: radial-gradient(circle, oklch(0.78 0.12 82 / 13%), oklch(0.7 0.12 80 / 5%) 42%, transparent 70%);
+    transform: translate3d(50vw, 22vh, 0);
+    opacity: 0;
+    transition:
+      transform 0.7s var(--entra),
+      opacity 0.9s var(--entra);
+    will-change: transform;
+  }
+
+  .progresso {
+    position: fixed;
+    inset: 0 0 auto 0;
+    height: 2px;
+    z-index: 30;
+    pointer-events: none;
+    background: linear-gradient(90deg, var(--ouro-claro), var(--ouro) 55%, var(--ouro-escuro));
+    box-shadow: 0 0 14px oklch(0.74 0.13 80 / 45%);
+    transform: scaleX(var(--prog, 0));
+    transform-origin: 0 50%;
+  }
+
+  .scan {
+    position: fixed;
+    inset: 0 0 auto 0;
+    height: 2px;
+    z-index: 31;
+    pointer-events: none;
+    background: linear-gradient(90deg, transparent, var(--ouro-claro) 18%, var(--ouro-claro) 82%, transparent);
+    box-shadow: 0 0 26px 5px oklch(0.8 0.13 84 / 40%);
+    opacity: 0;
+  }
+
+  .link .feixe {
+    position: absolute;
+    inset: -30% -55%;
+    pointer-events: none;
+    background: linear-gradient(100deg, transparent 40%, oklch(0.88 0.1 88 / 13%) 50%, transparent 60%);
+    transform: translateX(-150%);
+    opacity: 0;
+  }
+
+  .link {
+    --rx: 0deg;
+    --ry: 0deg;
+  }
+
+  .prova b.ouro {
+    background-image: linear-gradient(100deg, var(--ouro-escuro), var(--ouro-claro) 22%, var(--ouro) 42%, var(--ouro-claro) 62%, var(--ouro-escuro) 84%, var(--ouro) 100%);
+    background-size: 260% 100%;
+    background-position: 0 0;
+  }
+
+  .rodape p {
+    background-image: linear-gradient(100deg, var(--tinta-fraca) 30%, var(--ouro-claro) 50%, var(--tinta-fraca) 70%);
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .ico svg > * {
+    stroke-dasharray: 100;
+    stroke-dashoffset: 0;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .aura-2 {
+    animation: giraura 46s linear infinite;
+  }
+  .faisca i {
+    animation: sobe-faisca var(--ft, 14s) linear var(--fd, 0s) infinite;
+  }
+  .scan {
+    animation: varredura 1.6s var(--entra) 0.1s both;
+  }
+  .link .feixe {
+    animation: varre 7s var(--entra) calc(2.6s + var(--d, 0s) * 4) infinite;
+  }
+  .holofote.ativo {
+    opacity: 1;
+  }
+
+  /* anéis: órbitas em tracejado */
+  .aneis circle {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  .aneis circle:nth-of-type(2) {
+    stroke-dasharray: 6 26;
+    animation: orbita 38s linear infinite;
+  }
+  .aneis circle:nth-of-type(4) {
+    stroke-dasharray: 3 34;
+    animation: orbita 54s linear infinite reverse;
+  }
+  .aneis circle:nth-of-type(6) {
+    stroke-dasharray: 2 44;
+    animation: orbita 74s linear infinite;
+  }
+
+  /* profundidade do topo conforme a rolagem */
+  .js .topo {
+    transform: translateY(calc(var(--prog, 0) * -18px));
+    opacity: calc(1 - var(--prog, 0) * 0.2);
+  }
+
+  /* número: assenta e recebe a luz quando o contador termina */
+  .prova.visto b {
+    animation:
+      brilho-num 2.2s var(--entra) 1.45s both,
+      assenta 0.8s var(--mola) 1.45s both;
+  }
+  .prova::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 1px;
+    background: var(--gradiente-ouro);
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+    transition: transform 1.4s var(--entra) 0.35s;
+  }
+  .prova.visto::before {
+    transform: scaleX(1);
+  }
+
+  /* os pontos entre as áreas pulsam em sequência */
+  .areas i {
+    animation: pulsa-ponto 3.2s ease-in-out infinite;
+    animation-delay: calc(var(--i, 0) * 0.4s);
+  }
+
+  /* marca do rodape respira, o crédito pega luz */
+  .rodape svg {
+    animation: pulsa-ouro 6.5s ease-in-out infinite alternate;
+  }
+  .rodape p {
+    animation: brilho-rodape 9s var(--entra) 2s infinite;
+  }
+
+  @media (hover: hover) {
+    .link:hover .ico svg > * {
+      animation: redesenha 0.85s var(--entra);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) and (max-width: 479px) {
+  .faisca i:nth-child(n + 10) {
+    display: none;
+  }
+  .link .feixe {
+    animation-duration: 5.5s;
+  }
+  .aura-2 {
+    animation-duration: 62s;
+  }
+}
+
+@keyframes giraura {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes sobe-faisca {
+  0% {
+    transform: translate3d(0, 0, 0) scale(0.5);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.9;
+  }
+  75% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translate3d(var(--fdx, 20px), -108vh, 0) scale(1);
+    opacity: 0;
+  }
+}
+@keyframes varredura {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 0.65;
+  }
+  100% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+}
+@keyframes varre {
+  0% {
+    transform: translateX(-150%);
+    opacity: 0;
+  }
+  6% {
+    opacity: 1;
+  }
+  30% {
+    transform: translateX(150%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(150%);
+    opacity: 0;
+  }
+}
+@keyframes orbita {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes brilho-num {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 100% 0;
+  }
+}
+@keyframes assenta {
+  0% {
+    transform: scale(0.92);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes pulsa-ponto {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+@keyframes pulsa-ouro {
+  0% {
+    filter: drop-shadow(0 0 0 oklch(0.74 0.13 80 / 0%));
+  }
+  100% {
+    filter: drop-shadow(0 0 12px oklch(0.74 0.13 80 / 45%));
+  }
+}
+@keyframes brilho-rodape {
+  0% {
+    background-position: 120% 0;
+  }
+  40%,
+  100% {
+    background-position: -20% 0;
+  }
+}
+@keyframes redesenha {
+  0% {
+    stroke-dashoffset: 100;
+  }
+  100% {
+    stroke-dashoffset: 0;
   }
 }
