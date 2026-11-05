@@ -118,6 +118,12 @@
   --space-page: 32px;
   --motion-fast: 180ms;
   --motion-enter: 480ms;
+  --motion-reveal: 640ms;
+  --motion-reflect: 720ms;
+  --motion-step: 70ms;
+  --motion-distance: 12px;
+  --reflection: linear-gradient(110deg, transparent 25%, oklch(0.98 0.035 90 / 26%) 50%, transparent 75%);
+  --brand-reflection: linear-gradient(110deg, transparent 30%, oklch(0.94 0.08 88 / 32%) 50%, transparent 70%);
   --shadow-focus: 0 0 0 4px oklch(0.8 0.13 84 / 20%);
 }
 
@@ -147,7 +153,7 @@
   .areas i { margin: 0 4px; font-style: normal; color: var(--ouro); }
   .areas span { white-space: nowrap; }
   .links { display: grid; gap: 12px; min-width: 0; }
-  .krya-action.krya-fluid { height: auto; white-space: normal; border-radius: var(--radius-action); text-decoration: none; transition: background-color var(--motion-fast), border-color var(--motion-fast), transform var(--motion-fast); }
+  .krya-action.krya-fluid { position: relative; isolation: isolate; height: auto; white-space: normal; border-radius: var(--radius-action); text-decoration: none; transition: background-color var(--motion-fast), border-color var(--motion-fast), transform var(--motion-fast); }
   .krya-action.link { display: grid; grid-template-columns: 32px minmax(0, 1fr) 20px; align-items: center; justify-content: normal; gap: 16px; min-height: 98px; padding: 20px 24px; border: 1px solid var(--border-subtle); background: var(--painel); color: var(--ink); }
   .krya-action.principal { background: var(--primary-surface); color: var(--bg); border-color: var(--primary-surface); }
   .ico { display: grid; place-items: center; width: 32px; height: 32px; color: var(--ouro-medio); }
@@ -213,11 +219,55 @@
     .s { font-size: 12px; }
     .prova { flex-direction: column; align-items: flex-start; gap: 10px; }
   }
+  .marca { position: relative; isolation: isolate; }
+  .marca::after, .principal::after, .recovery-button::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0; background: var(--reflection); }
+  .marca::after { background: var(--brand-reflection); }
+  .masthead, .prova, .rodape { position: relative; }
+  .masthead::after, .prova::after, .rodape::after { content: ""; position: absolute; left: 0; width: 64px; height: 1px; background: var(--ouro); transform-origin: left; pointer-events: none; }
+  .masthead::after { bottom: -1px; }
+  .prova::after, .rodape::after { top: -1px; }
+  .link .ico svg { transition: transform var(--motion-fast) var(--suave); }
+  .krya-action:disabled, .krya-action[aria-disabled="true"] { opacity: 0.5; pointer-events: none; }
   @media (prefers-reduced-motion: no-preference) {
-    .topo, .links { animation: entrar var(--motion-enter) var(--suave) both; }
-    .links { animation-delay: 80ms; }
+    .masthead > span, .marca, .frase, .areas, .link > *, .recovery-content > * { animation: entrer-contenu var(--motion-reveal) var(--suave) backwards; }
+    .masthead > span { animation-duration: var(--motion-enter); }
+    .marca { animation-delay: var(--motion-step); }
+    .frase { animation-delay: calc(var(--motion-step) * 2); }
+    .areas { animation-delay: calc(var(--motion-step) * 3); }
+    .link:nth-child(1) > * { animation-delay: calc(var(--motion-step) * 2); }
+    .link:nth-child(2) > * { animation-delay: calc(var(--motion-step) * 3); }
+    .link:nth-child(3) > * { animation-delay: calc(var(--motion-step) * 4); }
+    .marca::after { animation: reflet var(--motion-reflect) var(--suave) 250ms; }
+    .masthead::after { animation: tracer var(--motion-reveal) var(--suave); }
+    [data-revealed] > * { animation: entrer-contenu var(--motion-reveal) var(--suave) backwards; }
+    [data-revealed] > :nth-child(2) { animation-delay: var(--motion-step); }
+    [data-revealed]::after { animation: tracer var(--motion-reveal) var(--suave); }
+    .recovery-content > :nth-child(2) { animation-delay: var(--motion-step); }
+    .recovery-content > :nth-child(3) { animation-delay: calc(var(--motion-step) * 2); }
+    .recovery-content > :nth-child(4) { animation-delay: calc(var(--motion-step) * 3); }
+    .principal:focus-visible::after, .recovery-button:focus-visible::after { animation: reflet var(--motion-reflect) var(--suave); }
+    .link:focus-visible .seta { transform: translate(3px, -3px); }
+    .krya-action:active { transform: scale(0.985); }
+    @media (hover: hover) and (pointer: fine) {
+      .krya-action.link:hover { transform: translateY(-3px); }
+      .link:hover .ico svg { transform: rotate(-6deg) scale(1.06); }
+      .link:hover .seta { transform: translate(3px, -3px); }
+      .principal:hover::after, .recovery-button:hover::after { animation: reflet var(--motion-reflect) var(--suave); }
+    }
+    @media (max-width: 900px) {
+      :root { --motion-reveal: 420ms; --motion-step: 40ms; --motion-distance: 6px; }
+    }
   }
-  @media (prefers-reduced-motion: reduce) { .krya-action, .link .seta { transition: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    .krya-action, .link .seta, .link .ico svg { transition: none; }
+    .krya-action:active, .link:hover .seta { transform: none; }
+  }
   @media (forced-colors: active) { .ouro { color: CanvasText; } .krya-action.link { border: 1px solid ButtonText; } }
 }
-@keyframes entrar { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes entrer-contenu { from { opacity: 0.35; transform: translateY(var(--motion-distance)); } to { opacity: 1; transform: translateY(0); } }
+@keyframes tracer { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes reflet {
+  0% { opacity: 0; transform: scaleX(0.15); }
+  35% { opacity: 0.65; }
+  100% { opacity: 0; transform: scaleX(1); }
+}
