@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { WHATSAPP_EXIBICAO, PORTFOLIO_URL, whatsapp } from "@/lib/krya-links";
+import { useMotionReveal } from "@/hooks/use-motion-reveal";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -90,8 +91,9 @@ function Marca() {
 }
 
 function KryaLinks() {
+  const motionRef = useMotionReveal();
   return (
-    <div className="pagina">
+    <div className="pagina" ref={motionRef}>
       <div className="masthead"><span>KRYA</span><span>IA · Sites · Sistemas</span></div>
       <main className="experiencia">
       <header className="topo">
@@ -170,13 +172,14 @@ function KryaLinks() {
 
       <section
         className="prova"
+        data-motion-reveal
         aria-label="A Krya em números"
       >
         <b className="ouro">+2.550</b>
         <span>empresas ajudadas com a nossa experiência em tecnologia</span>
       </section>
       </main>
-      <footer className="rodape">
+      <footer className="rodape" data-motion-reveal>
         <svg viewBox="0 0 100 100" aria-hidden="true" focusable="false">
           <defs>
             <linearGradient id="rod-ouro" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="100" y2="100">
