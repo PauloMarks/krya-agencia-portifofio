@@ -131,7 +131,7 @@ function useMovimento() {
           io.unobserve(e.target);
           const num = e.target.querySelector<HTMLElement>("[data-conta]");
           if (num && !reduz) {
-            const alvo = Number(num.dataset.conta);
+            const alvo = Number(num.dataset["conta"]);
             const t0 = performance.now();
             const passo = (t: number) => {
               const p = Math.min(1, (t - t0) / 1600);
