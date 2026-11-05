@@ -751,3 +751,274 @@
     transform: translateX(-50%);
   }
 }
+
+/* ---------- Motion system (Krya) ----------
+ * One language: gold light that "arrives" — mask wipes, rising entrances,
+ * a pointer-following glow on cards. Timing tokens below; everything is
+ * transform/opacity, and all of it switches off under reduced motion.
+ */
+:root {
+  --t-rapido: 0.25s;
+  --t-medio: 0.6s;
+  --t-lento: 1.2s;
+  --entra: cubic-bezier(0.22, 1, 0.36, 1);
+  --mola: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@layer components {
+  .aura {
+    position: fixed;
+    inset: -20%;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(38% 30% at 30% 20%, oklch(0.74 0.13 80 / 9%), transparent 70%),
+      radial-gradient(34% 28% at 72% 70%, oklch(0.6 0.12 75 / 7%), transparent 70%);
+    will-change: transform;
+  }
+
+  .marca-parallax {
+    transform: translate3d(var(--px, 0), var(--py, 0), 0);
+    transition: transform 0.9s var(--entra);
+  }
+
+  .link {
+    --mx: 50%;
+    --my: 50%;
+    isolation: isolate;
+  }
+  .link::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: radial-gradient(220px circle at var(--mx) var(--my), oklch(0.8 0.13 84 / 13%), transparent 65%);
+    opacity: 0;
+    transition: opacity var(--t-medio) var(--entra);
+    pointer-events: none;
+  }
+  .ico {
+    transition:
+      transform var(--t-medio) var(--mola),
+      border-color var(--t-medio),
+      box-shadow var(--t-medio);
+  }
+
+  .link.destaque {
+    border-color: oklch(0.8 0.13 84 / 30%);
+  }
+  .link.destaque .borda {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: conic-gradient(from var(--giro, 0deg), transparent 0 70%, var(--ouro-claro) 82%, transparent 94%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    opacity: 0.8;
+  }
+
+  .link:focus-visible::before,
+  .link:active::before {
+    opacity: 1;
+  }
+  .link:focus-visible .ico {
+    transform: scale(1.06);
+    border-color: var(--linha-forte);
+  }
+
+  @media (hover: hover) {
+    .link:hover {
+      transform: translateY(-2px);
+    }
+    .link:hover::before {
+      opacity: 1;
+    }
+    .link:hover .ico {
+      transform: scale(1.08) rotate(-6deg);
+      border-color: var(--linha-forte);
+      box-shadow: 0 0 22px -6px oklch(0.74 0.13 80 / 55%);
+    }
+  }
+
+  .prova b {
+    font-variant-numeric: tabular-nums;
+  }
+  .prova .linha-luz {
+    position: absolute;
+  }
+
+  .revela {
+    opacity: 1;
+  }
+
+  .rodape svg {
+    transition: transform var(--t-lento) var(--entra);
+  }
+  @media (hover: hover) {
+    .rodape svg:hover {
+      transform: rotate(-180deg);
+    }
+  }
+}
+
+@property --giro {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .aura {
+    animation: deriva 22s ease-in-out infinite alternate;
+  }
+  .marca .kr {
+    animation: wipe 1.4s var(--entra) 0.15s both;
+  }
+  .marca .kr .tinta,
+  .marca .kr [stroke^="url"] {
+    stroke-dasharray: 260;
+    animation: traco 1.6s var(--entra) 0.2s both;
+  }
+  .frase .ouro {
+    background-size: 220% 100%;
+    background-image: linear-gradient(100deg, var(--ouro-escuro) 20%, var(--ouro-claro) 45%, var(--ouro) 55%, var(--ouro-escuro) 80%);
+    animation: brilho 2.4s var(--entra) 0.6s both;
+  }
+  .frase .palavra {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+  }
+  .frase .palavra > span {
+    display: inline-block;
+    animation: mascara 1s var(--entra) both;
+    animation-delay: calc(0.2s + var(--i, 0) * 0.07s);
+  }
+  .areas span {
+    animation: sobe 0.8s var(--entra) both;
+    animation-delay: calc(0.3s + var(--i, 0) * 0.08s);
+  }
+  .link.sobe {
+    animation-name: entra-card;
+    animation-duration: 1s;
+  }
+  .link.destaque .borda {
+    animation: gira 6s linear 1.6s infinite;
+  }
+  .link.sobe .ico {
+    animation: pop 0.8s var(--mola) both;
+    animation-delay: calc(var(--d, 0s) + 0.25s);
+  }
+  .js .revela {
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+      opacity 0.9s var(--entra),
+      transform 0.9s var(--entra);
+  }
+  .js .revela.visto {
+    opacity: 1;
+    transform: none;
+  }
+  .prova::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -1px;
+    height: 1px;
+    background: var(--gradiente-ouro);
+    transform: scaleX(0);
+    transition: transform 1.4s var(--entra) 0.2s;
+  }
+  .prova {
+    position: relative;
+  }
+  .prova.visto::after {
+    transform: scaleX(1);
+  }
+  @supports (animation-timeline: scroll()) {
+    .aneis {
+      animation:
+        respira 9s ease-in-out infinite alternate,
+        afasta linear both;
+      animation-timeline: auto, scroll(root);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) and (max-width: 479px) {
+  .link.sobe {
+    animation-duration: 0.75s;
+  }
+  .aura {
+    animation-duration: 30s;
+  }
+}
+
+@keyframes deriva {
+  100% {
+    transform: translate3d(4%, 3%, 0) scale(1.08);
+  }
+}
+@keyframes wipe {
+  0% {
+    clip-path: inset(0 100% 0 0);
+    opacity: 0.4;
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+}
+@keyframes traco {
+  0% {
+    stroke-dashoffset: 260;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes brilho {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}
+@keyframes mascara {
+  0% {
+    transform: translateY(105%);
+  }
+}
+@keyframes entra-card {
+  0% {
+    opacity: 0;
+    transform: translateY(22px) scale(0.97);
+    filter: blur(4px);
+  }
+  60% {
+    filter: blur(0);
+  }
+}
+@keyframes pop {
+  0% {
+    transform: scale(0.4) rotate(-30deg);
+    opacity: 0;
+  }
+}
+@keyframes gira {
+  100% {
+    --giro: 360deg;
+  }
+}
+@keyframes afasta {
+  100% {
+    transform: translate(-50%, -50%) scale(1.25);
+    opacity: 0.4;
+  }
+}
