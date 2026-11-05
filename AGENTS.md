@@ -11,3 +11,5 @@
 
 ## Project rules
 - The links page styles live as named component classes plus brand tokens in `src/styles.css` (not inline utilities), so the black-and-gold look is tuned in one place.
+- Outbound contact destinations live in a browser-safe links module with focused tests so visual refinements cannot silently change the studio's contact details.
+- Krya actions use the shared Button's brand variant and fluid size with named CSS classes so links and error recovery share accessible interaction states.

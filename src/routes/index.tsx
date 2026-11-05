@@ -1,12 +1,6 @@
-import type { CSSProperties } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-
-const WHATSAPP_NUMERO = "5561993086986";
-const WHATSAPP_EXIBICAO = "(61) 99308-6986";
-const PORTFOLIO_URL = "https://krya-creative-portfolio.lovable.app";
-
-const whatsapp = (texto: string) =>
-  `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(texto)}`;
+import { Button } from "@/components/ui/button";
+import { WHATSAPP_EXIBICAO, PORTFOLIO_URL, whatsapp } from "@/lib/krya-links";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -45,17 +39,8 @@ function Seta() {
 
 function Marca() {
   return (
-    <h1 className="marca sobe" style={{ "--d": ".08s" } as CSSProperties}>
+    <h1 className="marca">
       <span className="sr">Krya</span>
-      <svg className="aneis" viewBox="-500 -500 1000 1000" aria-hidden="true" focusable="false">
-        <circle r="96" strokeOpacity=".34" />
-        <circle r="150" strokeOpacity=".24" />
-        <circle r="214" strokeOpacity=".16" />
-        <circle r="288" strokeOpacity=".10" />
-        <circle r="372" strokeOpacity=".06" />
-        <circle r="466" strokeOpacity=".035" />
-        <circle className="onda" r="300" strokeOpacity=".7" />
-      </svg>
       <svg className="kr" viewBox="0 0 392 132" aria-hidden="true" focusable="false">
         <defs>
           <linearGradient id="kr-ouro" x1="0" y1="0" x2="1" y2="1">
@@ -81,13 +66,13 @@ function Marca() {
           <path fill="url(#kr-ouro)" d="M13.44 44.59L74.44 94.59L65.56 105.41L4.56 55.41Z" />
           <g clipPath="url(#kr-corte)" fill="none" strokeWidth="14">
             {/* R */}
-            <g className="tinta" fill="none" style={{ fill: "none" }}>
+            <g className="tinta traco" fill="none">
               <path d="M100 0V100" />
               <path d="M93 7H128A21.5 21.5 0 0 1 128 50H100" />
               <path d="M124 50L158 100" />
             </g>
             {/* Y */}
-            <g className="tinta" style={{ fill: "none" }}>
+            <g className="tinta traco" fill="none">
               <path d="M184 0L220 52" strokeLinejoin="round" />
               <path d="M256 0L220 52" />
               <path d="M220 48V100" />
@@ -107,12 +92,14 @@ function Marca() {
 function KryaLinks() {
   return (
     <div className="pagina">
-      <header className="topo coluna">
+      <div className="masthead"><span>KRYA</span><span>IA · Sites · Sistemas</span></div>
+      <main className="experiencia">
+      <header className="topo">
         <Marca />
-        <p className="frase sobe" style={{ "--d": ".16s" } as CSSProperties}>
+        <p className="frase">
           Tecnologia que impulsiona <span className="ouro">o futuro</span>
         </p>
-        <p className="areas sobe" style={{ "--d": ".22s" } as CSSProperties}>
+        <p className="areas">
           <span>
             IA<i> · </i>Sites<i> · </i>Sistemas
           </span>
@@ -125,10 +112,9 @@ function KryaLinks() {
         </p>
       </header>
 
-      <nav className="links coluna" aria-label="Links da Krya">
+      <nav className="links" aria-label="Links da Krya">
+        <Button asChild variant="krya" size="fluid" className="link principal">
         <a
-          className="link sobe"
-          style={{ "--d": ".3s" } as CSSProperties}
           href={whatsapp("Olá! Vim pelo Instagram da Krya.")}
         >
           <span className="ico" aria-hidden="true">
@@ -143,7 +129,9 @@ function KryaLinks() {
           </span>
           <Seta />
         </a>
-        <a className="link sobe" style={{ "--d": ".36s" } as CSSProperties} href={PORTFOLIO_URL}>
+        </Button>
+        <Button asChild variant="krya" size="fluid" className="link">
+        <a href={PORTFOLIO_URL}>
           <span className="ico" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
               <rect x="3.75" y="3.75" width="7" height="7" rx="1.6" />
@@ -158,9 +146,9 @@ function KryaLinks() {
           </span>
           <Seta />
         </a>
+        </Button>
+        <Button asChild variant="krya" size="fluid" className="link">
         <a
-          className="link sobe"
-          style={{ "--d": ".42s" } as CSSProperties}
           href={whatsapp("Olá! Vim pelo Instagram e quero uma landing page pro meu negócio")}
         >
           <span className="ico" aria-hidden="true">
@@ -177,18 +165,18 @@ function KryaLinks() {
           </span>
           <Seta />
         </a>
+        </Button>
       </nav>
 
       <section
-        className="prova coluna sobe"
-        style={{ "--d": ".56s" } as CSSProperties}
+        className="prova"
         aria-label="A Krya em números"
       >
         <b className="ouro">+2.550</b>
         <span>empresas ajudadas com a nossa experiência em tecnologia</span>
       </section>
-
-      <footer className="rodape coluna sobe" style={{ "--d": ".76s" } as CSSProperties}>
+      </main>
+      <footer className="rodape">
         <svg viewBox="0 0 100 100" aria-hidden="true" focusable="false">
           <defs>
             <linearGradient id="rod-ouro" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="100" y2="100">
