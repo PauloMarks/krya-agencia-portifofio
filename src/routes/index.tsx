@@ -1,28 +1,12 @@
 import type { CSSProperties } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 
-import liraCapital from "@/assets/portfolio/liracapital.webp.asset.json";
-import fatimaNoivas from "@/assets/portfolio/fatimanoivas.webp.asset.json";
-import mauroStanichesk from "@/assets/portfolio/maurostanichesk.webp.asset.json";
-import primisown from "@/assets/portfolio/primisown.webp.asset.json";
-import pabloScopel from "@/assets/portfolio/pabloscopel.webp.asset.json";
-import idalecioOliveira from "@/assets/portfolio/idaleciooliveira.webp.asset.json";
-
 const WHATSAPP_NUMERO = "5561993086986";
 const WHATSAPP_EXIBICAO = "(61) 99308-6986";
 const PORTFOLIO_URL = "https://krya-creative-portfolio.lovable.app";
 
 const whatsapp = (texto: string) =>
   `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(texto)}`;
-
-const obras = [
-  { nome: "Lira Capital", src: liraCapital.url },
-  { nome: "Fátima Noivas", src: fatimaNoivas.url },
-  { nome: "Mauro Stanichesk", src: mauroStanichesk.url },
-  { nome: "Residência no Morumbi", src: primisown.url },
-  { nome: "Pablo Scopel", src: pabloScopel.url },
-  { nome: "Idalecio Oliveira", src: idalecioOliveira.url },
-];
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -202,36 +186,6 @@ function KryaLinks() {
       >
         <b className="ouro">+2.550</b>
         <span>empresas ajudadas com a nossa experiência em tecnologia</span>
-      </section>
-
-      <section className="obras sobe" style={{ "--d": ".62s" } as CSSProperties} aria-labelledby="obras-t">
-        <div className="obras-cab coluna">
-          <h2 id="obras-t">Do nosso portfólio</h2>
-          <a className="ver" href={PORTFOLIO_URL}>
-            Ver tudo
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d="M5 12h14M13 6l6 6-6 6" />
-            </svg>
-          </a>
-        </div>
-        <a
-          className="vitrine"
-          href={PORTFOLIO_URL}
-          aria-label={`Ver o portfólio da Krya: ${obras.map((o) => o.nome).join(", ")}`}
-        >
-          <div className="trilho">
-            {[...obras, ...obras].map((obra, i) => (
-              <figure
-                key={`${obra.nome}-${i}`}
-                className={i >= obras.length ? "obra copia" : "obra"}
-                aria-hidden={i >= obras.length ? true : undefined}
-              >
-                <img src={obra.src} width={400} height={250} alt="" decoding="async" />
-                <figcaption>{obra.nome}</figcaption>
-              </figure>
-            ))}
-          </div>
-        </a>
       </section>
 
       <footer className="rodape coluna sobe" style={{ "--d": ".76s" } as CSSProperties}>
