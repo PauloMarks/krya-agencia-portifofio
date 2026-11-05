@@ -2,7 +2,6 @@ import { useEffect, useRef, type CSSProperties, type ReactNode } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 
 const WHATSAPP_NUMERO = "5561993086986";
-const WHATSAPP_EXIBICAO = "(61) 99308-6986";
 const PORTFOLIO_URL = "https://krya-creative-portfolio.lovable.app";
 const EMPRESAS = 1750;
 
@@ -281,26 +280,7 @@ function KryaLinks() {
       </header>
 
       <nav className="links coluna" aria-label="Links da Krya">
-        <a
-          className="link sobe destaque"
-          style={{ "--d": ".3s" } as CSSProperties}
-          href={whatsapp("Olá! Vim pelo Instagram da Krya.")}
-        >
-          <span className="feixe" aria-hidden="true" />
-          <span className="ico" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M20.25 11.6a8.25 8.25 0 0 1-12.13 7.28L3.75 20.25l1.4-4.1A8.25 8.25 0 1 1 20.25 11.6Z" />
-              <path d="M8.6 10.1h6.8M8.6 13.3h4.4" />
-            </svg>
-          </span>
-          <span className="txt">
-            <span className="t">Falar com a Krya no WhatsApp</span>
-            <span className="s">{WHATSAPP_EXIBICAO}</span>
-          </span>
-          <Seta />
-          <span className="borda" aria-hidden="true" />
-        </a>
-        <a className="link sobe" style={{ "--d": ".36s" } as CSSProperties} href={PORTFOLIO_URL}>
+        <a className="link sobe" style={{ "--d": ".3s" } as CSSProperties} href={PORTFOLIO_URL}>
           <span className="feixe" aria-hidden="true" />
           <span className="ico" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
@@ -319,7 +299,7 @@ function KryaLinks() {
         </a>
         <a
           className="link sobe"
-          style={{ "--d": ".42s" } as CSSProperties}
+          style={{ "--d": ".36s" } as CSSProperties}
           href={whatsapp("Olá! Vim pelo Instagram e quero uma landing page pro meu negócio")}
         >
           <span className="feixe" aria-hidden="true" />
