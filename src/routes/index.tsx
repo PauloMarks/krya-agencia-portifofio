@@ -1,4 +1,4 @@
-import type { CSSProperties } from "react";
+import { useEffect, useRef, type CSSProperties, type ReactNode } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 
 const WHATSAPP_NUMERO = "5561993086986";
@@ -104,22 +104,108 @@ function Marca() {
   );
 }
 
-function KryaLinks() {
+const i = (n: number) => ({ "--i": n }) as CSSProperties;
+
+function Palavra({ n, children }: { n: number; children: ReactNode }) {
   return (
-    <div className="pagina">
+    <span className="palavra">
+      <span style={i(n)}>{children}</span>
+    </span>
+  );
+}
+
+function useMovimento() {
+  const raiz = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = raiz.current;
+    if (!el) return;
+    document.documentElement.classList.add("js");
+    const reduz = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // Reveal on scroll + count-up of the real number
+    const io = new IntersectionObserver(
+      (entradas) => {
+        for (const e of entradas) {
+          if (!e.isIntersecting) continue;
+          e.target.classList.add("visto");
+          io.unobserve(e.target);
+          const num = e.target.querySelector<HTMLElement>("[data-conta]");
+          if (num && !reduz) {
+            const alvo = Number(num.dataset.conta);
+            const t0 = performance.now();
+            const passo = (t: number) => {
+              const p = Math.min(1, (t - t0) / 1600);
+              const v = Math.round(alvo * (1 - Math.pow(1 - p, 3)));
+              num.textContent = "+" + v.toLocaleString("pt-BR");
+              if (p < 1) requestAnimationFrame(passo);
+            };
+            requestAnimationFrame(passo);
+          }
+        }
+      },
+      { threshold: 0.3 },
+    );
+    el.querySelectorAll(".revela").forEach((n) => io.observe(n));
+
+    // Pointer glow on cards
+    const onMove = (ev: PointerEvent) => {
+      const card = (ev.target as HTMLElement).closest<HTMLElement>(".link");
+      if (!card) return;
+      const r = card.getBoundingClientRect();
+      card.style.setProperty("--mx", `${ev.clientX - r.left}px`);
+      card.style.setProperty("--my", `${ev.clientY - r.top}px`);
+    };
+    el.addEventListener("pointermove", onMove, { passive: true });
+
+    // Subtle logo parallax following the pointer (mouse only)
+    const marca = el.querySelector<HTMLElement>(".marca-parallax");
+    let raf = 0;
+    const onPar = (ev: PointerEvent) => {
+      if (reduz || ev.pointerType !== "mouse" || !marca) return;
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const x = (ev.clientX / window.innerWidth - 0.5) * 14;
+        const y = (ev.clientY / window.innerHeight - 0.5) * 10;
+        marca.style.setProperty("--px", `${x}px`);
+        marca.style.setProperty("--py", `${y}px`);
+      });
+    };
+    window.addEventListener("pointermove", onPar, { passive: true });
+
+    return () => {
+      io.disconnect();
+      el.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointermove", onPar);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
+  return raiz;
+}
+
+function KryaLinks() {
+  const raiz = useMovimento();
+  return (
+    <div className="pagina" ref={raiz}>
+      <div className="aura" aria-hidden="true" />
       <header className="topo coluna">
-        <Marca />
+        <div className="marca-parallax">
+          <Marca />
+        </div>
         <p className="frase sobe" style={{ "--d": ".16s" } as CSSProperties}>
-          Tecnologia que impulsiona <span className="ouro">o futuro</span>
+          <Palavra n={0}>Tecnologia</Palavra> <Palavra n={1}>que</Palavra>{" "}
+          <Palavra n={2}>impulsiona</Palavra>{" "}
+          <Palavra n={3}>
+            <span className="ouro">o futuro</span>
+          </Palavra>
         </p>
         <p className="areas sobe" style={{ "--d": ".22s" } as CSSProperties}>
-          <span>
+          <span style={i(0)}>
             IA<i> · </i>Sites<i> · </i>Sistemas
           </span>
           <span className="sep" aria-hidden="true">
             <i> · </i>
           </span>
-          <span>
+          <span style={i(2)}>
             CRMs<i> · </i>SaaS<i> · </i>Automação
           </span>
         </p>
@@ -127,7 +213,7 @@ function KryaLinks() {
 
       <nav className="links coluna" aria-label="Links da Krya">
         <a
-          className="link sobe"
+          className="link sobe destaque"
           style={{ "--d": ".3s" } as CSSProperties}
           href={whatsapp("Olá! Vim pelo Instagram da Krya.")}
         >
@@ -142,6 +228,7 @@ function KryaLinks() {
             <span className="s">{WHATSAPP_EXIBICAO}</span>
           </span>
           <Seta />
+          <span className="borda" aria-hidden="true" />
         </a>
         <a className="link sobe" style={{ "--d": ".36s" } as CSSProperties} href={PORTFOLIO_URL}>
           <span className="ico" aria-hidden="true">
@@ -180,15 +267,14 @@ function KryaLinks() {
       </nav>
 
       <section
-        className="prova coluna sobe"
-        style={{ "--d": ".56s" } as CSSProperties}
+        className="prova coluna revela"
         aria-label="A Krya em números"
       >
-        <b className="ouro">+2.550</b>
+        <b className="ouro" data-conta="2550">+2.550</b>
         <span>empresas ajudadas com a nossa experiência em tecnologia</span>
       </section>
 
-      <footer className="rodape coluna sobe" style={{ "--d": ".76s" } as CSSProperties}>
+      <footer className="rodape coluna revela">
         <svg viewBox="0 0 100 100" aria-hidden="true" focusable="false">
           <defs>
             <linearGradient id="rod-ouro" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="100" y2="100">
