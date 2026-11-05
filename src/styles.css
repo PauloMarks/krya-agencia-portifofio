@@ -259,7 +259,7 @@
     }
   }
   @media (prefers-reduced-motion: reduce) {
-    .krya-action, .link .seta, .link .ico svg { transition: none; }
+    .krya-action.krya-fluid, .link .seta, .link .ico svg { transition: none; }
     .krya-action:active, .link:hover .seta { transform: none; }
   }
   @media (forced-colors: active) { .ouro { color: CanvasText; } .krya-action.link { border: 1px solid ButtonText; } }
