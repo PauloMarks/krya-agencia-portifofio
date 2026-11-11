@@ -300,7 +300,7 @@ function KryaLinks() {
         <a
           className="link sobe"
           style={{ "--d": ".36s" } as CSSProperties}
-          href={whatsapp("Olá! Vim pelo Instagram e quero um site pro meu negócio")}
+          href={whatsapp("Olá! Vim pelo site e quero um site pro meu negócio")}
           target="_blank"
           rel="noopener noreferrer"
         >
