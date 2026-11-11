@@ -300,7 +300,9 @@ function KryaLinks() {
         <a
           className="link sobe"
           style={{ "--d": ".36s" } as CSSProperties}
-          href={whatsapp("Olá! Vim pelo Instagram e quero uma landing page pro meu negócio")}
+          href={whatsapp("Olá! Vim pelo Instagram e quero um site pro meu negócio")}
+          target="_blank"
+          rel="noopener noreferrer"
         >
           <span className="feixe" aria-hidden="true" />
           <span className="ico" aria-hidden="true">
@@ -312,7 +314,7 @@ function KryaLinks() {
             </svg>
           </span>
           <span className="txt">
-            <span className="t">Quero uma landing page pro meu negócio</span>
+            <span className="t">Quero um SITE pro meu negócio</span>
             <span className="s">Atendimento pelo WhatsApp</span>
           </span>
           <Seta />
