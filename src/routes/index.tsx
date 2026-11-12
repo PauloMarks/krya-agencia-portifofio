@@ -1,7 +1,7 @@
 import { useEffect, useRef, type CSSProperties, type ReactNode } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 
-const WHATSAPP_NUMERO = "5561993086986";
+const WHATSAPP_NUMERO = "5522925489341";
 const PORTFOLIO_URL = "https://krya-creative-portfolio.lovable.app";
 const EMPRESAS = 1750;
 
