@@ -196,6 +196,32 @@ function useMovimento() {
     };
     el.addEventListener("pointermove", onMove, { passive: true });
 
+    // Magnetic pull on cards (mouse) + gold ripple on press
+    const onMag = (ev: PointerEvent) => {
+      if (reduz || ev.pointerType !== "mouse") return;
+      el.querySelectorAll<HTMLElement>(".link").forEach((c) => {
+        const r = c.getBoundingClientRect();
+        const dx = ev.clientX - (r.left + r.width / 2);
+        const dy = ev.clientY - (r.top + r.height / 2);
+        const dentro = Math.abs(dx) < r.width / 2 + 30 && Math.abs(dy) < r.height / 2 + 30;
+        c.style.setProperty("--mgx", dentro ? `${dx * 0.04}px` : "0px");
+        c.style.setProperty("--mgy", dentro ? `${dy * 0.12}px` : "0px");
+      });
+    };
+    el.addEventListener("pointermove", onMag, { passive: true });
+    const onDown = (ev: PointerEvent) => {
+      const card = (ev.target as HTMLElement).closest<HTMLElement>(".link");
+      if (!card || reduz) return;
+      const r = card.getBoundingClientRect();
+      const o = document.createElement("span");
+      o.className = "ondinha";
+      o.style.left = `${ev.clientX - r.left}px`;
+      o.style.top = `${ev.clientY - r.top}px`;
+      card.appendChild(o);
+      o.addEventListener("animationend", () => o.remove());
+    };
+    el.addEventListener("pointerdown", onDown);
+
     // Subtle logo parallax following the pointer (mouse only)
     const marca = el.querySelector<HTMLElement>(".marca-parallax");
     let raf = 0;
@@ -230,6 +256,8 @@ function useMovimento() {
     return () => {
       io.disconnect();
       el.removeEventListener("pointermove", onMove);
+      el.removeEventListener("pointermove", onMag);
+      el.removeEventListener("pointerdown", onDown);
       window.removeEventListener("pointermove", onPar);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
@@ -254,6 +282,12 @@ function KryaLinks() {
       <div className="holofote" aria-hidden="true" />
       <div className="scan" aria-hidden="true" />
       <div className="progresso" aria-hidden="true" />
+      <div className="grao" aria-hidden="true" />
+      <div className="vinheta" aria-hidden="true" />
+      <div className="cortina" aria-hidden="true">
+        <i />
+        <i />
+      </div>
 
       <header className="topo coluna">
         <div className="marca-parallax">

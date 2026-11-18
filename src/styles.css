@@ -1354,3 +1354,50 @@
     stroke-dashoffset: 0;
   }
 }
+
+/* ===== Motion System III — camada cinematográfica ===== */
+.grao {
+  position: fixed; inset: -50%; z-index: 1; pointer-events: none; opacity: .07;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+.vinheta {
+  position: fixed; inset: 0; z-index: 1; pointer-events: none;
+  background: radial-gradient(ellipse 120% 90% at 50% 40%, transparent 55%, color-mix(in oklab, var(--bg) 85%, transparent) 100%);
+}
+.cortina {
+  position: fixed; inset: 0; z-index: 50; pointer-events: none; display: none;
+}
+.cortina i { position: absolute; left: 0; right: 0; height: 50.5%; background: var(--bg); }
+.cortina i:first-child { top: 0; }
+.cortina i:last-child { bottom: 0; }
+.cortina::after {
+  content: ""; position: absolute; left: 50%; top: 50%; width: 60vw; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--ouro-claro), transparent);
+  transform: translate(-50%, -50%) scaleX(0);
+}
+.link { --mgx: 0px; --mgy: 0px; translate: var(--mgx) var(--mgy); transition: translate .5s cubic-bezier(.2,.8,.2,1); }
+.link .ondinha {
+  position: absolute; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%;
+  pointer-events: none; background: radial-gradient(circle, color-mix(in oklab, var(--ouro-claro) 55%, transparent), transparent 70%);
+  animation: ondinha .7s ease-out forwards;
+}
+@keyframes ondinha { from { transform: scale(0); opacity: 1; } to { transform: scale(40); opacity: 0; } }
+
+@media (prefers-reduced-motion: no-preference) {
+  .grao { animation: grao 1.2s steps(6) infinite; }
+  .js .cortina { display: block; }
+  .cortina i:first-child { animation: cortina-sobe 1.1s .45s cubic-bezier(.77,0,.18,1) forwards; }
+  .cortina i:last-child { animation: cortina-desce 1.1s .45s cubic-bezier(.77,0,.18,1) forwards; }
+  .cortina::after { animation: cortina-linha 1.3s cubic-bezier(.65,0,.35,1) forwards; }
+  .cortina { animation: some 0s 1.7s forwards; }
+}
+@media (prefers-reduced-motion: reduce) { .link { translate: none; } .link .ondinha { display: none; } }
+@keyframes grao {
+  0% { transform: translate(0,0); } 20% { transform: translate(-6%,4%); } 40% { transform: translate(5%,-7%); }
+  60% { transform: translate(-3%,8%); } 80% { transform: translate(7%,2%); } 100% { transform: translate(0,0); }
+}
+@keyframes cortina-sobe { to { transform: translateY(-101%); } }
+@keyframes cortina-desce { to { transform: translateY(101%); } }
+@keyframes cortina-linha { 0% { transform: translate(-50%,-50%) scaleX(0); opacity: 1; } 45% { transform: translate(-50%,-50%) scaleX(1); opacity: 1; } 100% { transform: translate(-50%,-50%) scaleX(1.6); opacity: 0; } }
+@keyframes some { to { visibility: hidden; } }
