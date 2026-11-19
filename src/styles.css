@@ -59,8 +59,8 @@
   --radius: 1rem;
 
   /* Brand palette */
-  --bg: #000000;
-  --painel: oklch(0.185 0.013 80);
+  --bg: #071426;
+  --painel: oklch(0.215 0.035 255);
   --ink: oklch(0.951 0.013 90);
   --tinta-suave: oklch(0.77 0.022 80);
   --tinta-fraca: oklch(0.64 0.025 80);
@@ -82,11 +82,11 @@
   --popover-foreground: var(--ink);
   --primary: var(--ouro);
   --primary-foreground: var(--bg);
-  --secondary: oklch(0.22 0.012 80);
+  --secondary: oklch(0.255 0.035 255);
   --secondary-foreground: var(--ink);
-  --muted: oklch(0.22 0.012 80);
+  --muted: oklch(0.255 0.035 255);
   --muted-foreground: var(--tinta-suave);
-  --accent: oklch(0.24 0.02 80);
+  --accent: oklch(0.29 0.045 255);
   --accent-foreground: var(--ouro-claro);
   --destructive: oklch(0.65 0.2 25);
   --destructive-foreground: var(--ink);
@@ -102,7 +102,7 @@
   --sidebar-foreground: var(--ink);
   --sidebar-primary: var(--ouro);
   --sidebar-primary-foreground: var(--bg);
-  --sidebar-accent: oklch(0.24 0.02 80);
+  --sidebar-accent: oklch(0.29 0.045 255);
   --sidebar-accent-foreground: var(--ink);
   --sidebar-border: var(--linha);
   --sidebar-ring: var(--ouro-medio);
